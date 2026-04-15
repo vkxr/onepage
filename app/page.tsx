@@ -1,65 +1,882 @@
-import Image from "next/image";
+/* ── One-page website for Veyber Services Pvt Ltd ── */
 
+const services = [
+  {
+    label: "ECOMMERCE",
+    title: "E-commerce Development",
+    subtitle: "Build high-performance online stores that convert visitors into customers.",
+    items: [
+      "Shopify / WooCommerce Development",
+      "Custom eCommerce Websites",
+      "Payment Gateway Integration",
+      "Mobile-Optimized Stores",
+    ],
+    img: "https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?w=1400&auto=format&fit=crop&q=80",
+  },
+  {
+    label: "MARKETPLACE",
+    title: "E-commerce Account Management",
+    subtitle: "We manage and optimise your selling platforms for maximum growth.",
+    items: [
+      "Amazon / Flipkart Account Management",
+      "Product Listing Optimization",
+      "Sales & Performance Tracking",
+      "Order & Inventory Management",
+    ],
+    img: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=1400&auto=format&fit=crop&q=80",
+  },
+  {
+    label: "SOCIAL MEDIA",
+    title: "Social Media Handling",
+    subtitle: "Strengthen your brand presence across all major platforms.",
+    items: [
+      "Content Creation & Posting",
+      "Audience Engagement",
+      "Brand Strategy",
+      "Growth Campaigns",
+    ],
+    img: "https://images.unsplash.com/photo-1563986768494-4dee2763ff3f?w=1400&auto=format&fit=crop&q=80",
+  },
+  {
+    label: "DIGITAL MARKETING",
+    title: "Digital Marketing Services",
+    subtitle: "Drive targeted traffic, leads, and sales with proven strategies.",
+    items: [
+      "SEO (Search Engine Optimization)",
+      "Google Ads & PPC Campaigns",
+      "Social Media Marketing",
+      "Lead Generation Campaigns",
+    ],
+    img: "https://images.unsplash.com/photo-1533750516457-a7f992034fec?w=1400&auto=format&fit=crop&q=80",
+  },
+  {
+    label: "CONSULTANCY",
+    title: "Business Consultancy",
+    subtitle: "Make smarter decisions with expert guidance and market insights.",
+    items: [
+      "Business Growth Strategy",
+      "Market Research & Analysis",
+      "Revenue Optimization",
+      "Startup Consulting",
+    ],
+    img: "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=1400&auto=format&fit=crop&q=80",
+  },
+];
+
+const whyCards = [
+  {
+    label: "RESULTS",
+    title: "Result-Driven Approach",
+    desc: "We focus on measurable growth, not just promises. Every strategy is tied to real, trackable business outcomes.",
+    img: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=900&auto=format&fit=crop&q=80",
+  },
+  {
+    label: "DATA",
+    title: "Data-Based Strategies",
+    desc: "Every decision is backed by insights and analytics. We let the numbers guide execution for maximum ROI.",
+    img: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=900&auto=format&fit=crop&q=80",
+  },
+  {
+    label: "LOCAL",
+    title: "Gujarat Expertise + Global Vision",
+    desc: "We understand the local Gujarat market while delivering global-level digital solutions for modern growth.",
+    img: "https://images.unsplash.com/photo-1552664730-d307ca884978?w=900&auto=format&fit=crop&q=80",
+  },
+  {
+    label: "SCALABLE",
+    title: "Fast & Scalable Solutions",
+    desc: "Inspired by modern digital platforms, we build systems designed to scale quickly without missing a beat.",
+    img: "https://images.unsplash.com/photo-1504868584819-f8e8b4b6d7e3?w=900&auto=format&fit=crop&q=80",
+  },
+  {
+    label: "SUPPORT",
+    title: "Dedicated Support",
+    desc: "We work as your growth partner, not just a service provider. Your success drives everything we do.",
+    img: "https://images.unsplash.com/photo-1600880292203-757bb62b4baf?w=900&auto=format&fit=crop&q=80",
+  },
+  {
+    label: "ALL-IN-ONE",
+    title: "All-in-One Digital Solutions",
+    desc: "From development to marketing — everything under one roof for seamless, integrated execution.",
+    img: "https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=900&auto=format&fit=crop&q=80",
+  },
+];
+
+const processSteps = [
+  {
+    step: "Step one",
+    title: "Initial\nConsultation",
+    desc: "Reach out through phone, WhatsApp, or our website. We understand your goals and current challenges.",
+    cta: "Get started",
+    side: "right",
+  },
+  {
+    step: "Step two",
+    title: "Strategy\n& Audit",
+    desc: "Our experts analyse your current digital presence and craft a tailored growth strategy for your business.",
+    cta: "Continue",
+    side: "left",
+  },
+  {
+    step: "Step three",
+    title: "Transparent\nProposal",
+    desc: "You receive a clear scope with transparent pricing — no hidden costs, no surprises before we proceed.",
+    cta: "Approve",
+    side: "right",
+  },
+  {
+    step: "Step four",
+    title: "Expert\nExecution",
+    desc: "We execute the strategy using proven techniques, cutting-edge tools, and dedicated ongoing support.",
+    cta: "Complete",
+    side: "left",
+  },
+];
+
+const stats = [
+  { value: "150+", label: "Projects Delivered", sub: "Across Gujarat & India" },
+  { value: "3X", label: "Average Revenue Growth", sub: "For our eCommerce clients" },
+  { value: "50+", label: "Brands Transformed", sub: "From startups to enterprises" },
+];
+
+const contactDetails = [
+  { icon: "location_on", label: "Location", value: "Gujarat, India" },
+  { icon: "call", label: "Call Us", value: "+91 6355183655" },
+  { icon: "mail", label: "Email", value: "info@veyber.co.in" },
+  { icon: "language", label: "Website", value: "veyber.co.in" },
+];
+
+/* ── PAGE ── */
 export default function Home() {
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
+    <>
+      {/* ════════════════════════ NAV ════════════════════════ */}
+      <nav className="fixed top-0 w-full z-50 bg-[#111]/80 backdrop-blur-md border-b border-white/5">
+        <div className="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+          {/* Logo */}
+          <div>
+            <span className="text-white font-black text-xl font-headline tracking-tight">Veyber</span>
+          </div>
+
+          {/* Links */}
+          <div className="hidden md:flex items-center gap-8">
+            {(["About", "Services", "Why Us", "Contact"] as const).map((l) => (
+              <a
+                key={l}
+                href={`#${l.toLowerCase().replace(" ", "-")}`}
+                className="text-white/55 hover:text-white transition-colors text-sm font-medium"
+              >
+                {l}
+              </a>
+            ))}
+          </div>
+
+          <a
+            href="#contact"
+            className="hidden md:inline-flex group relative items-center gap-2 px-5 py-2.5 rounded-full text-sm font-bold overflow-hidden transition-all duration-300 hover:scale-105 active:scale-95"
+            style={{ background: "linear-gradient(135deg,#ffffff 0%,#e0e0e0 100%)", color: "#111111", boxShadow: "0 2px 16px rgba(255,255,255,0.15)" }}
+          >
+            <span className="absolute inset-0 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-600 bg-gradient-to-r from-transparent via-white/50 to-transparent skew-x-[-20deg]" />
+            <span className="relative z-10">Get Free Consultation</span>
+            <span className="relative z-10 w-5 h-5 rounded-full bg-black/10 flex items-center justify-center">
+              <span className="material-symbols-outlined" style={{ fontSize: "13px" }}>arrow_forward</span>
+            </span>
+          </a>
+          <button className="md:hidden text-white">
+            <span className="material-symbols-outlined">menu</span>
+          </button>
+        </div>
+      </nav>
+
+      {/* ════════════════════════ HERO ════════════════════════ */}
+      <section className="relative h-screen min-h-[640px] flex flex-col items-center justify-center text-center overflow-hidden">
+        <img
+          src="https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d?w=1920&auto=format&fit=crop&q=90"
+          alt="Digital marketing and eCommerce growth strategy — Veyber Services Pvt Ltd, Gujarat"
+          className="absolute inset-0 w-full h-full object-cover object-center"
         />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
+        {/* Overlay — slightly deeper at bottom to keep text crisp */}
+        <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/50 to-black/85" />
+
+        <div className="relative z-10 max-w-4xl mx-auto px-6 flex flex-col items-center gap-7">
+          {/* Eyebrow badge */}
+          <div
+            className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-semibold tracking-widest uppercase text-white/70"
+            style={{ background: "rgba(255,255,255,0.1)", border: "1px solid rgba(255,255,255,0.2)", backdropFilter: "blur(6px)" }}
+          >
+            <span className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse" />
+            Digital Growth Partner · Gujarat, India
+          </div>
+
+          {/* Headline — two-tier sizing */}
+          <h1 className="font-black font-headline text-white text-center" style={{ letterSpacing: "-0.025em" }}>
+            <span className="block" style={{ fontSize: "clamp(3rem, 7.5vw, 5.75rem)", lineHeight: 1.0 }}>
+              Scale Your Digital Empire
+            </span>
+            <span className="block text-white/50 font-bold mt-3" style={{ fontSize: "clamp(1.5rem, 3.5vw, 2.6rem)", lineHeight: 1.2, letterSpacing: "-0.01em" }}>
+              with Expert Solutions Across Gujarat
+            </span>
           </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
+
+          {/* Thin rule */}
+          <div className="w-14 h-px" style={{ background: "rgba(255,255,255,0.2)" }} />
+
+          {/* Subtext */}
+          <p className="text-white/55 text-lg md:text-xl max-w-xl mx-auto text-center" style={{ lineHeight: 1.8 }}>
+            We help businesses grow faster, smarter, and more profitably with powerful{" "}
+            <span className="text-white/85 font-semibold">eCommerce</span>,{" "}
+            <span className="text-white/85 font-semibold">digital marketing</span>, and{" "}
+            <span className="text-white/85 font-semibold">business consultancy</span>{" "}
+            solutions tailored for modern growth.
           </p>
+
+          <div className="flex flex-col sm:flex-row gap-4 justify-center pt-1">
+            {/* Primary CTA */}
+            <a
+              href="#contact"
+              className="group relative inline-flex items-center justify-center gap-3 px-8 py-4 rounded-full font-bold text-base overflow-hidden transition-all duration-300 hover:scale-105 active:scale-95 shadow-[0_0_30px_rgba(255,255,255,0.15)] hover:shadow-[0_0_45px_rgba(255,255,255,0.3)]"
+              style={{ background: "linear-gradient(135deg,#ffffff 0%,#e8e8e8 100%)", color: "#111111" }}
+            >
+              {/* Shimmer sweep */}
+              <span className="absolute inset-0 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700 bg-gradient-to-r from-transparent via-white/40 to-transparent skew-x-[-20deg]" />
+              <span className="relative z-10">Start Your Growth Journey Today</span>
+              <span className="relative z-10 w-7 h-7 rounded-full bg-black/10 flex items-center justify-center group-hover:bg-black/20 transition-colors">
+                <span className="material-symbols-outlined text-sm" style={{ fontSize: "16px" }}>arrow_forward</span>
+              </span>
+            </a>
+
+            {/* Secondary CTA */}
+            <a
+              href="#contact"
+              className="group inline-flex items-center justify-center gap-3 px-8 py-4 rounded-full font-semibold text-base text-white transition-all duration-300 hover:scale-105 active:scale-95"
+              style={{ background: "rgba(255,255,255,0.1)", border: "1.5px solid rgba(255,255,255,0.35)", backdropFilter: "blur(8px)" }}
+            >
+              <span className="w-7 h-7 rounded-full bg-white/15 flex items-center justify-center group-hover:bg-white/25 transition-colors">
+                <span className="material-symbols-outlined text-white text-sm" style={{ fontSize: "16px" }}>call</span>
+              </span>
+              Get Free Consultation
+            </a>
+          </div>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
+
+        {/* Scroll cue */}
+        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1 text-white/35">
+          <span className="text-[10px] tracking-widest uppercase">Scroll</span>
+          <span className="material-symbols-outlined text-sm animate-bounce-subtle">keyboard_arrow_down</span>
+        </div>
+      </section>
+
+      {/* ════════════════════════ STATS — light ════════════════════════ */}
+      <section className="bg-[#eef0f8] py-28">
+        <div className="max-w-7xl mx-auto px-8">
+
+          {/* Header row */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 mb-20 items-end">
+            {/* Left: headline */}
+            <div className="space-y-5">
+              <p
+                className="text-xs font-bold tracking-[0.2em] uppercase"
+                style={{ color: "#111111", opacity: 0.45 }}
+              >
+                Proven Track Record
+              </p>
+              <h2
+                className="font-headline text-[#111111] leading-[1.15] tracking-tighter"
+                style={{ fontSize: "clamp(3rem, 6vw, 5.5rem)", fontWeight: 800 }}
+              >
+                Why Gujarat<br />trusts us
+              </h2>
+            </div>
+
+            {/* Right: description + CTAs */}
+            <div className="space-y-8 pb-2">
+              <p
+                className="text-lg leading-[1.85] font-medium"
+                style={{ color: "#111111", opacity: 0.65 }}
+              >
+                Years of reliable service, hundreds of satisfied businesses,
+                and a commitment to quality that never wavers.
+              </p>
+              <div className="flex flex-wrap items-center gap-4">
+                {/* Learn more — solid dark pill */}
+                <a
+                  href="#about"
+                  className="inline-flex items-center gap-2 px-6 py-3 rounded-full font-bold text-sm text-white transition-all duration-200 hover:opacity-85 active:scale-95"
+                  style={{ background: "#111111" }}
+                >
+                  Learn more
+                </a>
+                {/* Our services — text + icon button */}
+                <a
+                  href="#services"
+                  className="inline-flex items-center gap-2 font-semibold text-sm text-[#111111]/70 hover:text-[#111111] transition-all duration-200"
+                >
+                  Our services
+                  <span className="w-7 h-7 rounded-full flex items-center justify-center bg-[#111]/8 border border-[#111]/12">
+                    <span className="material-symbols-outlined text-[#111111]" style={{ fontSize: "14px" }}>arrow_forward</span>
+                  </span>
+                </a>
+              </div>
+            </div>
+          </div>
+
+          {/* Stat cards */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+            {stats.map((s) => (
+              <div
+                key={s.label}
+                className="bg-white rounded-3xl p-9 flex flex-col gap-6"
+                style={{ border: "1px solid rgba(17,17,17,0.07)", boxShadow: "0 2px 20px rgba(17,17,17,0.04)" }}
+              >
+                {/* Label */}
+                <p
+                  className="text-sm font-semibold"
+                  style={{ color: "#111111", opacity: 0.55 }}
+                >
+                  {s.label}
+                </p>
+
+                {/* Divider */}
+                <div style={{ height: "1px", background: "rgba(17,17,17,0.08)" }} />
+
+                {/* Value + sublabel */}
+                <div className="flex justify-between items-end gap-4">
+                  <span
+                    className="font-black font-headline text-[#111111] tracking-tighter leading-none"
+                    style={{ fontSize: "clamp(3.5rem, 6vw, 5rem)" }}
+                  >
+                    {s.value}
+                  </span>
+                  <p
+                    className="text-xs text-right leading-[1.6] max-w-[120px] font-medium"
+                    style={{ color: "#111111", opacity: 0.5 }}
+                  >
+                    {s.sub}
+                  </p>
+                </div>
+              </div>
+            ))}
+          </div>
+
+        </div>
+      </section>
+
+      {/* ════════════════════════ ABOUT — dark ════════════════════════ */}
+      <section id="about" className="bg-[#111111] py-28">
+        <div className="max-w-7xl mx-auto px-8">
+          <p className="text-white/45 text-xs font-bold tracking-[0.2em] uppercase mb-14">WHO WE ARE</p>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
+            {/* Copy */}
+            <div className="space-y-7">
+              <h2
+                className="font-headline text-white leading-[1.15] tracking-tighter"
+                style={{ fontSize: "clamp(2.75rem, 5.5vw, 4.5rem)", fontWeight: 800 }}
+              >
+                Built on<br />integrity<br />and expertise
+              </h2>
+              <p className="text-white/70 text-base md:text-lg leading-[1.85]">
+                At Veyber Services Pvt Ltd, we don&apos;t just offer services — we build scalable growth
+                systems that drive real business results. We are a results-driven digital solutions
+                company helping businesses across Gujarat transform their online presence and maximise
+                profitability.
+              </p>
+              <p className="text-white/70 text-base md:text-lg leading-[1.85]">
+                From startups to established enterprises, we empower brands with innovative solutions
+                in eCommerce, digital marketing, and business consulting.
+              </p>
+              <ul className="space-y-3.5 pt-1">
+                {[
+                  "Transparent pricing with no surprises",
+                  "Data-driven strategies backed by analytics",
+                  "Dedicated account support from day one",
+                ].map((item) => (
+                  <li key={item} className="flex items-center gap-3 text-white/75 text-sm">
+                    <span className="material-symbols-outlined text-white/50 flex-shrink-0" style={{ fontSize: "16px" }}>
+                      radio_button_checked
+                    </span>
+                    {item}
+                  </li>
+                ))}
+              </ul>
+              <div className="flex items-center gap-3 pt-3">
+                <a href="#services" className="btn-white">Explore more</a>
+                <a
+                  href="#contact"
+                  className="w-9 h-9 rounded-full border border-white/20 flex items-center justify-center text-white/60 hover:text-white hover:border-white/50 transition-all"
+                >
+                  <span className="material-symbols-outlined" style={{ fontSize: "16px" }}>arrow_forward</span>
+                </a>
+              </div>
+            </div>
+
+            {/* Image */}
+            <div className="relative rounded-3xl overflow-hidden aspect-[4/3]">
+              <img
+                src="https://images.unsplash.com/photo-1600880292203-757bb62b4baf?w=1200&auto=format&fit=crop&q=80"
+                alt="Veyber team collaborating on digital marketing and eCommerce growth strategy in Gujarat"
+                className="w-full h-full object-cover"
+              />
+              <div className="absolute inset-0 bg-[#111]/15" />
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ════════════════════════ SERVICES — very dark ════════════════════════ */}
+      <section id="services" className="bg-[#0d0d0d] py-24">
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="text-center mb-16 space-y-4">
+            <p className="text-white/50 text-xs font-bold tracking-widest uppercase">WHAT WE DO</p>
+            <h2
+              className="font-headline text-white leading-[1.15] tracking-tighter"
+              style={{ fontSize: "clamp(3rem, 6vw, 5rem)", fontWeight: 800 }}
+            >
+              Complete digital<br />growth solutions
+            </h2>
+            <p className="text-white/70 text-lg max-w-xl mx-auto">
+              We provide end-to-end services designed to help your business grow in today&apos;s
+              competitive digital world.
+            </p>
+          </div>
+
+          {/* Hero service card (full width) */}
+          <div className="photo-card relative rounded-2xl overflow-hidden mb-4 h-[400px] md:h-[440px] cursor-pointer">
+            <img
+              src={services[0].img}
+              alt={services[0].title}
+              className="absolute inset-0 w-full h-full object-cover"
             />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+            <div className="absolute inset-0 bg-gradient-to-r from-black/85 via-black/55 to-transparent" />
+            <div className="absolute inset-0 p-10 flex flex-col justify-between">
+              <p className="text-white/65 text-xs font-bold tracking-widest uppercase">SERVICE</p>
+              <div className="space-y-4 max-w-lg">
+                <h3 className="text-3xl md:text-4xl font-black font-headline text-white leading-tight">
+                  {services[0].title}
+                </h3>
+                <p className="text-white/80 text-sm leading-relaxed">{services[0].subtitle}</p>
+                <ul className="space-y-1">
+                  {services[0].items.map((item) => (
+                    <li key={item} className="text-white/75 text-xs flex items-center gap-2">
+                      <span className="w-1 h-1 rounded-full bg-white/30 flex-shrink-0" />
+                      {item}
+                    </li>
+                  ))}
+                </ul>
+                <div className="flex flex-wrap gap-3 pt-2">
+                  <a href="#contact" className="btn-white text-xs px-5 py-2">Explore</a>
+                  <a href="#contact" className="inline-flex items-center gap-1 text-white/45 hover:text-white transition-colors text-xs font-semibold">
+                    Get started <span className="material-symbols-outlined text-sm">arrow_forward</span>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* 2-col grid for remaining services */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {services.slice(1).map((s) => (
+              <div key={s.title} className="photo-card relative rounded-2xl overflow-hidden h-[300px] cursor-pointer">
+                <img
+                  src={s.img}
+                  alt={s.title}
+                  className="absolute inset-0 w-full h-full object-cover"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/45 to-black/5" />
+                <div className="absolute inset-0 p-8 flex flex-col justify-between">
+                  <p className="text-white/65 text-xs font-bold tracking-widest uppercase">{s.label}</p>
+                  <div className="space-y-3">
+                    <h3 className="text-xl md:text-2xl font-black font-headline text-white leading-tight">
+                      {s.title}
+                    </h3>
+                    <p className="text-white/80 text-xs leading-relaxed">{s.subtitle}</p>
+                    <div className="flex flex-wrap gap-3">
+                      <a href="#contact" className="inline-flex items-center gap-1 px-4 py-1.5 bg-white/10 border border-white/15 text-white font-semibold rounded-full text-xs hover:bg-white/20 transition-all">
+                        Explore
+                      </a>
+                      <a href="#contact" className="w-7 h-7 rounded-full border border-white/20 flex items-center justify-center text-white/60 hover:text-white hover:border-white/50 transition-all">
+                        <span className="material-symbols-outlined" style={{ fontSize: "13px" }}>arrow_forward</span>
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
-      </main>
-    </div>
+      </section>
+
+      {/* ════════════════════════ WHY CHOOSE US — dark ════════════════════════ */}
+      <section id="why-us" className="bg-[#111111] py-24">
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="text-center mb-16 space-y-4">
+            <p className="text-white/50 text-xs font-bold tracking-widest uppercase">ADVANTAGES</p>
+            <h2
+              className="font-headline text-white leading-[1.15] tracking-tighter"
+              style={{ fontSize: "clamp(3rem, 5.5vw, 4.5rem)", fontWeight: 800 }}
+            >
+              Why choose<br />Veyber Services?
+            </h2>
+            <p className="text-white/70 text-lg max-w-xl mx-auto">
+              Speed, reliability, and expertise in every project we deliver.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {whyCards.map((card) => (
+              <div key={card.title} className="photo-card relative rounded-2xl overflow-hidden h-[280px] cursor-pointer">
+                <img
+                  src={card.img}
+                  alt={card.title}
+                  className="absolute inset-0 w-full h-full object-cover"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-black/70" />
+                <div className="absolute inset-0 p-7 flex flex-col justify-between">
+                  <p className="text-white text-[10px] font-bold tracking-widest uppercase" style={{ textShadow: "0 1px 8px rgba(0,0,0,0.6)" }}>{card.label}</p>
+                  <div className="space-y-2">
+                    <h3 className="text-xl font-black font-headline text-white leading-tight">{card.title}</h3>
+                    <p className="text-white/80 text-xs leading-relaxed">{card.desc}</p>
+                    <a href="#contact" className="inline-flex items-center gap-1 text-white/40 hover:text-white transition-colors text-xs font-semibold pt-1">
+                      Explore <span className="material-symbols-outlined text-sm">arrow_forward</span>
+                    </a>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ════════════════════════ PROCESS — deepest dark ════════════════════════ */}
+      <section className="bg-[#0a0a0a] py-24">
+        <div className="max-w-7xl mx-auto px-6">
+          {/* Header */}
+          <div className="text-center mb-20 space-y-5">
+            <p className="text-white/50 text-xs font-bold tracking-widest uppercase">OUR PROCESS</p>
+            <h2
+              className="font-headline text-white leading-[1.15] tracking-tighter"
+              style={{ fontSize: "clamp(3rem, 6vw, 5rem)", fontWeight: 800 }}
+            >
+              From enquiry<br />to growth
+            </h2>
+            <p className="text-white/70 text-lg">Four simple steps to transform your business.</p>
+            <a href="#contact" className="inline-flex btn-outline mt-2">Learn more</a>
+          </div>
+
+          {/* Staggered steps */}
+          <div className="relative max-w-4xl mx-auto">
+            {/* Center timeline line */}
+            <div
+              className="absolute top-0 bottom-0 hidden lg:block"
+              style={{ left: "50%", transform: "translateX(-50%)", width: "1px", background: "rgba(255,255,255,0.08)" }}
+            />
+
+            <div className="space-y-6">
+              {processSteps.map((s, i) => {
+                const isRight = s.side === "right";
+                return (
+                  <div key={s.step} className={`flex ${isRight ? "lg:justify-start" : "lg:justify-end"} relative`}>
+                    {/* Timeline dot */}
+                    <div
+                      className="absolute top-1/2 hidden lg:block"
+                      style={{
+                        left: "50%",
+                        transform: "translate(-50%, -50%)",
+                        width: "12px",
+                        height: "12px",
+                        borderRadius: "50%",
+                        background: "rgba(255,255,255,0.25)",
+                      }}
+                    />
+                    {/* Card */}
+                    <div
+                      className={`w-full lg:w-[47%] bg-[#1a1a1a] rounded-2xl p-8 border border-white/5 space-y-4
+                        ${isRight ? "lg:mr-[3%]" : "lg:ml-[3%]"}`}
+                    >
+                      <p className="text-white/55 text-sm font-bold">{s.step}</p>
+                      <h3 className="text-3xl md:text-4xl font-black font-headline text-white leading-tight whitespace-pre-line">
+                        {s.title}
+                      </h3>
+                      <p className="text-white/70 text-sm leading-relaxed">{s.desc}</p>
+                      <div className="flex flex-wrap gap-3 pt-2">
+                        <a href="#contact" className="inline-flex items-center gap-2 px-5 py-2 bg-white/12 border border-white/20 text-white font-semibold rounded-full text-sm hover:bg-white/15 transition-all">
+                          {s.cta}
+                        </a>
+                        <a href="#contact" className="w-8 h-8 rounded-full border border-white/20 flex items-center justify-center text-white/60 hover:text-white hover:border-white/50 transition-all">
+                          <span className="material-symbols-outlined" style={{ fontSize: "15px" }}>arrow_forward</span>
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ════════════════════════ CTA BANNER — photo bg ════════════════════════ */}
+      <section className="relative py-40 overflow-hidden">
+        {/* Premium aspirational image: looking up at glass skyscrapers = growth + ambition */}
+        <img
+          src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=1920&auto=format&fit=crop&q=90"
+          alt="Ready to grow your business with Veyber Services — digital marketing and eCommerce experts in Gujarat"
+          className="absolute inset-0 w-full h-full object-cover object-center"
+        />
+        {/* Multi-stop overlay for depth */}
+        <div className="absolute inset-0" style={{ background: "linear-gradient(to bottom, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0.70) 50%, rgba(0,0,0,0.80) 100%)" }} />
+
+        <div className="relative z-10 max-w-3xl mx-auto px-6 text-center space-y-8">
+          <p className="text-white/55 text-xs font-bold tracking-widest uppercase">START NOW</p>
+
+          <h2
+            className="font-headline text-white leading-[1.15] tracking-tighter"
+            style={{ fontSize: "clamp(3rem, 6vw, 5rem)", fontWeight: 800 }}
+          >
+            Ready to grow your<br />business?
+          </h2>
+
+          <p className="text-white/70 text-lg md:text-xl max-w-lg mx-auto leading-relaxed">
+            Get in touch today and let us handle your digital growth while you focus on what you do best.
+            Fast, reliable, and result-driven.
+          </p>
+
+          {/* Premium CTA buttons */}
+          <div className="flex flex-col sm:flex-row gap-4 justify-center pt-4">
+            {/* Call now */}
+            <a
+              href="tel:+916355183655"
+              className="group relative inline-flex items-center justify-center gap-3 px-8 py-4 rounded-full font-bold text-base overflow-hidden transition-all duration-300 hover:scale-105 active:scale-95"
+              style={{ background: "linear-gradient(135deg,#ffffff 0%,#e8e8e8 100%)", color: "#111111", boxShadow: "0 4px 24px rgba(255,255,255,0.2)" }}
+            >
+              <span className="absolute inset-0 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700 bg-gradient-to-r from-transparent via-white/40 to-transparent skew-x-[-20deg]" />
+              <span className="relative z-10 w-7 h-7 rounded-full bg-black/10 flex items-center justify-center group-hover:bg-black/20 transition-colors">
+                <span className="material-symbols-outlined" style={{ fontSize: "16px" }}>call</span>
+              </span>
+              <span className="relative z-10">Call Now</span>
+            </a>
+
+            {/* WhatsApp */}
+            <a
+              href="https://wa.me/916355183655"
+              className="group inline-flex items-center justify-center gap-3 px-8 py-4 rounded-full font-semibold text-base text-white transition-all duration-300 hover:scale-105 active:scale-95"
+              style={{ background: "rgba(37,211,102,0.15)", border: "1.5px solid rgba(37,211,102,0.45)", backdropFilter: "blur(8px)" }}
+            >
+              {/* WhatsApp logo SVG */}
+              <span className="w-7 h-7 rounded-full flex items-center justify-center" style={{ background: "rgba(37,211,102,0.2)" }}>
+                <svg viewBox="0 0 24 24" fill="currentColor" className="w-4 h-4 text-green-400">
+                  <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
+                </svg>
+              </span>
+              <span>WhatsApp Us</span>
+            </a>
+          </div>
+        </div>
+      </section>
+
+      {/* ════════════════════════ CONTACT — light ════════════════════════ */}
+      <section id="contact" className="bg-[#eef0f8] py-24">
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
+            {/* Left: info */}
+            <div className="space-y-10">
+              <div className="space-y-4">
+                <p className="text-[#111]/55 text-xs font-bold tracking-widest uppercase">GET IN TOUCH</p>
+                <h2
+                  className="font-headline text-[#111] leading-[1.15] tracking-tighter"
+                  style={{ fontSize: "clamp(2.75rem, 5.5vw, 4.5rem)", fontWeight: 800 }}
+                >
+                  Let&apos;s grow your<br />business together
+                </h2>
+              </div>
+              <p className="text-[#111]/70 text-lg leading-relaxed max-w-md">
+                Ready to scale with expert digital solutions? Fill out the form and our team will get back
+                to you within 24 hours.
+              </p>
+
+              <div className="space-y-5">
+                {contactDetails.map((d) => (
+                  <div key={d.label} className="flex items-center gap-4">
+                    <div
+                      className="flex-shrink-0 rounded-full bg-[#111]/10"
+                      style={{ width: 40, height: 40, display: "grid", placeItems: "center" }}
+                    >
+                      <span className="material-symbols-outlined text-[#111]/60" style={{ fontSize: 18, lineHeight: 1, display: "block" }}>
+                        {d.icon}
+                      </span>
+                    </div>
+                    <div>
+                      <p className="text-[#111]/55 text-[10px] font-bold uppercase tracking-widest" style={{ lineHeight: 1, marginBottom: 4 }}>{d.label}</p>
+                      <p className="text-[#111] font-semibold text-sm" style={{ lineHeight: 1 }}>{d.value}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              <div className="flex flex-wrap gap-3">
+                <a href="tel:+916355183655" className="btn-dark">Talk to Expert</a>
+                <a href="mailto:info@veyber.co.in" className="inline-flex items-center gap-1 text-[#111]/65 hover:text-[#111] transition-colors text-sm font-semibold">
+                  Send Email <span className="material-symbols-outlined text-base">arrow_forward</span>
+                </a>
+              </div>
+            </div>
+
+            {/* Right: form */}
+            <div className="bg-white rounded-3xl p-10 shadow-sm border border-[#111]/5">
+              <h3 className="text-2xl font-black font-headline text-[#111] mb-1">
+                Get a Free Consultation Today!
+              </h3>
+              <p className="text-[#111]/60 text-sm mb-8">Our team will respond within 24 hours.</p>
+
+              <form className="space-y-5">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div>
+                    <label className="text-[10px] font-bold uppercase tracking-widest text-[#111]/60 block mb-2">Name</label>
+                    <input
+                      type="text"
+                      placeholder="Your Name"
+                      className="w-full bg-[#f5f5f7] rounded-xl px-4 py-3 text-[#111] placeholder:text-[#111]/40 outline-none focus:ring-2 focus:ring-[#111]/25 text-sm border-0"
+                    />
+                  </div>
+                  <div>
+                    <label className="text-[10px] font-bold uppercase tracking-widest text-[#111]/60 block mb-2">Email</label>
+                    <input
+                      type="email"
+                      placeholder="you@example.com"
+                      className="w-full bg-[#f5f5f7] rounded-xl px-4 py-3 text-[#111] placeholder:text-[#111]/40 outline-none focus:ring-2 focus:ring-[#111]/25 text-sm border-0"
+                    />
+                  </div>
+                </div>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div>
+                    <label className="text-[10px] font-bold uppercase tracking-widest text-[#111]/60 block mb-2">Phone</label>
+                    <input
+                      type="tel"
+                      placeholder="+91 00000 00000"
+                      className="w-full bg-[#f5f5f7] rounded-xl px-4 py-3 text-[#111] placeholder:text-[#111]/40 outline-none focus:ring-2 focus:ring-[#111]/25 text-sm border-0"
+                    />
+                  </div>
+                  <div>
+                    <label className="text-[10px] font-bold uppercase tracking-widest text-[#111]/60 block mb-2">Service Interested</label>
+                    <select className="w-full bg-[#f5f5f7] rounded-xl px-4 py-3 text-[#111] outline-none focus:ring-2 focus:ring-[#111]/15 text-sm border-0 appearance-none">
+                      <option value="">Select a Service</option>
+                      <option>E-commerce Development</option>
+                      <option>E-commerce Account Management</option>
+                      <option>Social Media Handling</option>
+                      <option>Digital Marketing Services</option>
+                      <option>Business Consultancy</option>
+                    </select>
+                  </div>
+                </div>
+                <div>
+                  <label className="text-[10px] font-bold uppercase tracking-widest text-[#111]/60 block mb-2">Message</label>
+                  <textarea
+                    rows={4}
+                    placeholder="Tell us about your project goals..."
+                    className="w-full bg-[#f5f5f7] rounded-xl px-4 py-3 text-[#111] placeholder:text-[#111]/40 outline-none focus:ring-2 focus:ring-[#111]/25 resize-none text-sm border-0"
+                  />
+                </div>
+                <button
+                  type="submit"
+                  className="w-full py-4 bg-[#111] text-white font-black rounded-xl hover:bg-[#2a2a2a] transition-all text-sm uppercase tracking-widest"
+                >
+                  Get Free Consultation →
+                </button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ════════════════════════ FOOTER ════════════════════════ */}
+      <footer className="bg-[#111111] pt-16 pb-8">
+        <div className="max-w-7xl mx-auto px-6">
+          {/* Columns */}
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-12 pb-14 border-b border-white/8">
+            {/* Brand */}
+            <div className="col-span-2 md:col-span-1 space-y-4">
+              <div>
+                <div className="text-white font-black text-2xl font-headline">Veyber</div>
+                <div className="text-white/25 text-[10px] tracking-widest uppercase">Services Pvt Ltd</div>
+              </div>
+              <p className="text-white/60 text-sm leading-relaxed max-w-xs">
+                Expert digital solutions for businesses across Gujarat. Grow faster, smarter, more profitably.
+              </p>
+            </div>
+
+            {/* Services */}
+            <div>
+              <h4 className="text-white font-bold text-[10px] uppercase tracking-widest mb-5">Our Services</h4>
+              <ul className="space-y-2.5">
+                {services.map((s) => (
+                  <li key={s.title}>
+                    <a href="#services" className="text-white/55 text-sm hover:text-white transition-colors">
+                      {s.title}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            {/* Quick Links */}
+            <div>
+              <h4 className="text-white font-bold text-[10px] uppercase tracking-widest mb-5">Quick Links</h4>
+              <ul className="space-y-2.5">
+                {[
+                  { label: "About Us", href: "#about" },
+                  { label: "Why Choose Us", href: "#why-us" },
+                  { label: "Our Process", href: "#process" },
+                  { label: "Contact Us", href: "#contact" },
+                ].map((l) => (
+                  <li key={l.label}>
+                    <a href={l.href} className="text-white/55 text-sm hover:text-white transition-colors">
+                      {l.label}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            {/* Contact */}
+            <div>
+              <h4 className="text-white font-bold text-[10px] uppercase tracking-widest mb-5">Contact Us</h4>
+              <ul className="space-y-3">
+                {contactDetails.map((d) => (
+                  <li key={d.label} className="flex items-center gap-2.5 text-white/60 text-sm">
+                    <span className="material-symbols-outlined text-white/45 flex-shrink-0" style={{ fontSize: "16px", lineHeight: 1 }}>{d.icon}</span>
+                    {d.value}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+
+          {/* Newsletter */}
+          <div className="py-12 border-b border-white/8">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+              <div>
+                <h4 className="text-white font-black text-xl font-headline mb-1">Newsletter</h4>
+                <p className="text-white/35 text-sm">
+                  Get digital marketing tips, industry insights, and exclusive offers.
+                </p>
+              </div>
+              <div className="flex gap-3">
+                <input
+                  type="email"
+                  placeholder="Enter your email"
+                  className="flex-1 bg-white/5 border border-white/10 rounded-full px-5 py-3 text-white placeholder:text-white/25 outline-none focus:border-white/25 text-sm transition-colors"
+                />
+                <button className="btn-white whitespace-nowrap px-6 py-3">Subscribe</button>
+              </div>
+            </div>
+          </div>
+
+          {/* Bottom bar */}
+          <div className="pt-8 flex flex-col md:flex-row justify-between items-center gap-4 text-white/22 text-xs">
+            <p>© 2025 Veyber Services Pvt Ltd. All rights reserved. | Gujarat, India</p>
+            <p className="text-center">Digital Marketing · eCommerce Development · Business Consultancy · Gujarat</p>
+          </div>
+        </div>
+      </footer>
+    </>
   );
 }
