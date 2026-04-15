@@ -889,7 +889,7 @@ export default function Home() {
         target="_blank"
         rel="noopener noreferrer"
         aria-label="Chat on WhatsApp"
-        className="fixed bottom-16 right-5 sm:bottom-20 sm:right-7 z-50 group"
+        className="fixed bottom-10 right-5 sm:bottom-12 sm:right-7 z-50 group"
       >
         <span className="absolute inset-0 rounded-full bg-[#25D366] animate-ping opacity-25" />
         <span
