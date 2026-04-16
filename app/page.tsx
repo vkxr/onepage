@@ -1,5 +1,8 @@
+"use client";
+
 /* ── One-page website for Veyber Services Pvt Ltd ── */
 import Image from "next/image";
+import { useState, useEffect, useRef, useCallback } from "react";
 
 const services = [
   {
@@ -109,84 +112,223 @@ const processSteps = [
     title: "Initial\nConsultation",
     desc: "Reach out through phone, WhatsApp, or our website. We understand your goals and current challenges.",
     cta: "Get started",
-    side: "right",
+    side: "left",
   },
   {
     step: "Step two",
     title: "Strategy\n& Audit",
     desc: "Our experts analyse your current digital presence and craft a tailored growth strategy for your business.",
     cta: "Continue",
-    side: "left",
+    side: "right",
   },
   {
     step: "Step three",
     title: "Transparent\nProposal",
     desc: "You receive a clear scope with transparent pricing — no hidden costs, no surprises before we proceed.",
     cta: "Approve",
-    side: "right",
+    side: "left",
   },
   {
     step: "Step four",
     title: "Expert\nExecution",
     desc: "We execute the strategy using proven techniques, cutting-edge tools, and dedicated ongoing support.",
     cta: "Complete",
-    side: "left",
+    side: "right",
   },
 ];
 
-const stats = [
-  { value: "150+", label: "Projects Delivered", sub: "Across Gujarat & India" },
-  { value: "3X", label: "Average Revenue Growth", sub: "For our eCommerce clients" },
-  { value: "50+", label: "Brands Transformed", sub: "From startups to enterprises" },
+const statsData = [
+  { target: 150, suffix: "+", label: "Projects Delivered", sub: "Across Gujarat & India" },
+  { target: 3, suffix: "X", label: "Average Revenue Growth", sub: "For our eCommerce clients" },
+  { target: 50, suffix: "+", label: "Brands Transformed", sub: "From startups to enterprises" },
 ];
 
 const contactDetails = [
-  { icon: "location_on", label: "Location", value: "Gujarat, India" },
-  { icon: "call", label: "Call Us", value: "+91 6355183655" },
-  { icon: "mail", label: "Email", value: "info@veyber.co.in" },
-  { icon: "language", label: "Website", value: "veyber.co.in" },
+  { icon: "location_on", label: "Location", value: "310, Maa darshan ats, Nr. panchvati, Ajwa road, Vadodara - 390019", href: null },
+  { icon: "call", label: "Call Us", value: "+91 6355183655", href: "tel:+916355183655" },
+  { icon: "mail", label: "Email", value: "admin@veyber.co.in", href: "mailto:admin@veyber.co.in" },
+  { icon: "language", label: "Website", value: "veyber.co.in", href: "https://veyber.co.in" },
 ];
+
+const navLinks = [
+  { label: "Home", href: "#" },
+  { label: "About Us", href: "#about" },
+  { label: "Services", href: "#services" },
+  { label: "Contact Us", href: "#contact" },
+];
+
+/* ── Animated Counter ── */
+function CountUp({ target, suffix, duration = 2000, started }: { target: number; suffix: string; duration?: number; started: boolean }) {
+  const [count, setCount] = useState(0);
+
+  useEffect(() => {
+    if (!started) return;
+    let startTime: number | null = null;
+    let raf: number;
+
+    const animate = (timestamp: number) => {
+      if (!startTime) startTime = timestamp;
+      const progress = Math.min((timestamp - startTime) / duration, 1);
+      const eased = 1 - Math.pow(1 - progress, 3);
+      setCount(Math.floor(eased * target));
+      if (progress < 1) {
+        raf = requestAnimationFrame(animate);
+      } else {
+        setCount(target);
+      }
+    };
+
+    raf = requestAnimationFrame(animate);
+    return () => cancelAnimationFrame(raf);
+  }, [target, duration, started]);
+
+  return (
+    <span className="font-black font-headline text-[#111111] leading-none" style={{ fontSize: "clamp(3rem, 6vw, 5rem)", letterSpacing: "-0.03em" }}>
+      {count}{suffix}
+    </span>
+  );
+}
 
 /* ── PAGE ── */
 export default function Home() {
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [statsStarted, setStatsStarted] = useState(false);
+  const statsRef = useRef<HTMLDivElement>(null);
+  const [formState, setFormState] = useState<"idle" | "success">("idle");
+
+  /* Intersection Observer for counter */
+  useEffect(() => {
+    const el = statsRef.current;
+    if (!el) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setStatsStarted(true);
+          observer.disconnect();
+        }
+      },
+      { threshold: 0.3 }
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
+
+  /* Close mobile menu on outside click */
+  const handleMenuClose = useCallback(() => setMenuOpen(false), []);
+
+  /* Form submission — sends all fields to WhatsApp */
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const form = e.currentTarget;
+    const data = new FormData(form);
+
+    const name    = data.get("name")    as string;
+    const email   = data.get("email")   as string;
+    const phone   = data.get("phone")   as string;
+    const service = data.get("service") as string;
+    const message = data.get("message") as string;
+
+    const text = [
+      "*VEYBER SERVICES PVT. LTD.*",
+      "*New Enquiry — Website Form*",
+      "",
+      "-----------------------------",
+      "*CONTACT DETAILS*",
+      "-----------------------------",
+      `*Name     :*  ${name}`,
+      `*Email    :*  ${email}`,
+      `*Phone    :*  ${phone || "Not provided"}`,
+      `*Service  :*  ${service || "Not selected"}`,
+      "-----------------------------",
+      "",
+      "*MESSAGE*",
+      "-----------------------------",
+      `${message || "No message"}`,
+      "-----------------------------",
+      "",
+      "_Please reply within 24 hours_",
+      "_www.veyber.co.in_",
+    ].join("\n");
+
+    window.open(
+      `https://wa.me/916355183655?text=${encodeURIComponent(text)}`,
+      "_blank"
+    );
+
+    setFormState("success");
+    form.reset();
+  };
+
   return (
     <>
       {/* ════════════════════════ NAV ════════════════════════ */}
-      <nav className="fixed top-0 w-full z-50 bg-[#111]/80 backdrop-blur-md border-b border-white/5">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-3 sm:py-4 flex justify-between items-center">
+      <nav className="fixed top-0 w-full z-50 bg-[#111]/90 backdrop-blur-md border-b border-white/5">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between gap-4">
           {/* Logo */}
-          <div>
-            <img src="/logo.png" alt="Veyber" className="h-6 sm:h-7" />
-          </div>
+          <a href="#" className="flex-shrink-0 cursor-pointer">
+            <img src="/logo.png" alt="Veyber" className="h-7" style={{ filter: "brightness(0) invert(1)" }} />
+          </a>
 
-          {/* Links */}
-          <div className="hidden md:flex items-center gap-6 lg:gap-8">
-            {(["About", "Services", "Why Us", "Contact"] as const).map((l) => (
+          {/* Desktop Links */}
+          <div className="hidden md:flex items-center gap-5 lg:gap-7">
+            {navLinks.map((l) => (
               <a
-                key={l}
-                href={`#${l.toLowerCase().replace(" ", "-")}`}
-                className="text-white/55 hover:text-white transition-colors text-sm font-medium"
+                key={l.label}
+                href={l.href}
+                className="text-white/60 hover:text-white transition-colors text-sm font-medium whitespace-nowrap"
               >
-                {l}
+                {l.label}
               </a>
             ))}
           </div>
 
+          {/* Desktop CTA */}
           <a
             href="#contact"
-            className="hidden md:inline-flex group relative items-center gap-2 px-4 lg:px-5 py-2 lg:py-2.5 rounded-full text-sm font-bold overflow-hidden transition-all duration-300 hover:scale-105 active:scale-95"
+            className="hidden md:inline-flex group relative items-center gap-2 px-4 lg:px-5 py-2 lg:py-2.5 rounded-full text-sm font-bold overflow-hidden transition-all duration-300 hover:scale-105 active:scale-95 flex-shrink-0"
             style={{ background: "linear-gradient(135deg,#ffffff 0%,#e0e0e0 100%)", color: "#111111", boxShadow: "0 2px 16px rgba(255,255,255,0.15)" }}
           >
             <span className="absolute inset-0 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-600 bg-gradient-to-r from-transparent via-white/50 to-transparent skew-x-[-20deg]" />
-            <span className="relative z-10">Get Free Consultation</span>
-            <span className="relative z-10 w-5 h-5 rounded-full bg-black/10 flex items-center justify-center">
+            <span className="relative z-10 whitespace-nowrap">Get Free Consultation</span>
+            <span className="relative z-10 w-5 h-5 rounded-full bg-black/10 flex items-center justify-center flex-shrink-0">
               <span className="material-symbols-outlined" style={{ fontSize: "13px" }}>arrow_forward</span>
             </span>
           </a>
-          <button className="md:hidden text-white p-1" aria-label="Open menu">
-            <span className="material-symbols-outlined" style={{ fontSize: "28px" }}>menu</span>
+
+          {/* Hamburger */}
+          <button
+            className="md:hidden text-white p-1 flex-shrink-0"
+            aria-label="Toggle menu"
+            onClick={() => setMenuOpen((v) => !v)}
+          >
+            <span className="material-symbols-outlined" style={{ fontSize: "28px" }}>
+              {menuOpen ? "close" : "menu"}
+            </span>
           </button>
         </div>
+
+        {/* Mobile Menu Dropdown */}
+        {menuOpen && (
+          <div className="md:hidden bg-[#111]/98 backdrop-blur-md border-t border-white/8 px-4 py-4 flex flex-col gap-1">
+            {navLinks.map((l) => (
+              <a
+                key={l.label}
+                href={l.href}
+                onClick={handleMenuClose}
+                className="text-white/75 hover:text-white transition-colors text-base font-medium py-3 px-2 border-b border-white/5 last:border-0"
+              >
+                {l.label}
+              </a>
+            ))}
+            <a
+              href="#contact"
+              onClick={handleMenuClose}
+              className="mt-3 inline-flex items-center justify-center gap-2 px-5 py-3 rounded-full text-sm font-bold text-[#111] bg-white"
+            >
+              Get Free Consultation
+            </a>
+          </div>
+        )}
       </nav>
 
       {/* ════════════════════════ HERO ════════════════════════ */}
@@ -213,11 +355,11 @@ export default function Home() {
           </div>
 
           {/* Headline */}
-          <h1 className="font-black font-headline text-white text-center" style={{ letterSpacing: "-0.025em" }}>
-            <span className="block" style={{ fontSize: "clamp(2.25rem, 7.5vw, 5.75rem)", lineHeight: 1.0 }}>
+          <h1 className="font-black font-headline text-white text-center">
+            <span className="block whitespace-nowrap" style={{ fontSize: "clamp(1rem, 6vw, 5.75rem)", lineHeight: 1.15 }}>
               Scale Your Digital Empire
             </span>
-            <span className="block text-white/50 font-bold mt-2 sm:mt-3" style={{ fontSize: "clamp(1.1rem, 3.5vw, 2.6rem)", lineHeight: 1.2, letterSpacing: "-0.01em" }}>
+            <span className="block text-white/50 font-bold mt-2 sm:mt-3" style={{ fontSize: "clamp(1.1rem, 3.5vw, 2.6rem)", lineHeight: 1.35 }}>
               with Expert Solutions Across Gujarat
             </span>
           </h1>
@@ -226,7 +368,7 @@ export default function Home() {
           <div className="w-14 h-px" style={{ background: "rgba(255,255,255,0.2)" }} />
 
           {/* Subtext */}
-          <p className="text-white/55 text-base sm:text-lg md:text-xl max-w-xl mx-auto text-center" style={{ lineHeight: 1.8 }}>
+          <p className="text-white/55 text-base sm:text-lg md:text-xl max-w-xl mx-auto text-center" style={{ lineHeight: 1.8, letterSpacing: "0.02em" }}>
             We help businesses grow faster, smarter, and more profitably with powerful{" "}
             <span className="text-white/85 font-semibold">eCommerce</span>,{" "}
             <span className="text-white/85 font-semibold">digital marketing</span>, and{" "}
@@ -234,7 +376,7 @@ export default function Home() {
             solutions tailored for modern growth.
           </p>
 
-          <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center pt-1 w-full sm:w-auto">
+          <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center pt-6 sm:pt-8 w-full sm:w-auto">
             {/* Primary CTA */}
             <a
               href="#contact"
@@ -242,7 +384,7 @@ export default function Home() {
               style={{ background: "linear-gradient(135deg,#ffffff 0%,#e8e8e8 100%)", color: "#111111" }}
             >
               <span className="absolute inset-0 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700 bg-gradient-to-r from-transparent via-white/40 to-transparent skew-x-[-20deg]" />
-              <span className="relative z-10">Start Your Growth Journey</span>
+              <span className="relative z-10" style={{ letterSpacing: "0.03em" }}>Start Your Growth Journey</span>
               <span className="relative z-10 w-6 sm:w-7 h-6 sm:h-7 rounded-full bg-black/10 flex items-center justify-center group-hover:bg-black/20 transition-colors">
                 <span className="material-symbols-outlined" style={{ fontSize: "14px" }}>arrow_forward</span>
               </span>
@@ -250,14 +392,14 @@ export default function Home() {
 
             {/* Secondary CTA */}
             <a
-              href="#contact"
+              href="tel:+916355183655"
               className="group inline-flex items-center justify-center gap-3 px-6 sm:px-8 py-3.5 sm:py-4 rounded-full font-semibold text-sm sm:text-base text-white transition-all duration-300 hover:scale-105 active:scale-95"
               style={{ background: "rgba(255,255,255,0.1)", border: "1.5px solid rgba(255,255,255,0.35)", backdropFilter: "blur(8px)" }}
             >
               <span className="w-6 sm:w-7 h-6 sm:h-7 rounded-full bg-white/15 flex items-center justify-center group-hover:bg-white/25 transition-colors">
                 <span className="material-symbols-outlined text-white" style={{ fontSize: "14px" }}>call</span>
               </span>
-              Get Free Consultation
+              <span style={{ letterSpacing: "0.03em" }}>Get Free Consultation</span>
             </a>
           </div>
         </div>
@@ -277,26 +419,20 @@ export default function Home() {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-20 mb-14 lg:mb-20 items-end">
             {/* Left: headline */}
             <div className="space-y-4 sm:space-y-5">
-              <p
-                className="text-xs font-bold tracking-[0.2em] uppercase"
-                style={{ color: "#111111", opacity: 0.45 }}
-              >
+              <p className="text-xs font-bold tracking-[0.2em] uppercase" style={{ color: "#111111", opacity: 0.45 }}>
                 Proven Track Record
               </p>
               <h2
-                className="font-headline text-[#111111] leading-[1.15] tracking-tighter"
+                className="font-headline text-[#111111] leading-[1.3] tracking-tight"
                 style={{ fontSize: "clamp(2.5rem, 6vw, 5.5rem)", fontWeight: 800 }}
               >
-                Why Gujarat<br />trusts us
+                Why Gujarat<br />trust us
               </h2>
             </div>
 
             {/* Right: description + CTAs */}
             <div className="space-y-6 sm:space-y-8 pb-2">
-              <p
-                className="text-base sm:text-lg leading-[1.85] font-medium"
-                style={{ color: "#111111", opacity: 0.65 }}
-              >
+              <p className="text-base sm:text-lg leading-[1.85] font-medium" style={{ color: "#111111", opacity: 0.65 }}>
                 Years of reliable service, hundreds of satisfied businesses,
                 and a commitment to quality that never wavers.
               </p>
@@ -321,32 +457,21 @@ export default function Home() {
             </div>
           </div>
 
-          {/* Stat cards */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 sm:gap-5">
-            {stats.map((s) => (
+          {/* Stat cards with animated counters */}
+          <div ref={statsRef} className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 sm:gap-5">
+            {statsData.map((s) => (
               <div
                 key={s.label}
                 className="bg-[#e8ecf6] rounded-2xl sm:rounded-3xl p-6 sm:p-9 flex flex-col gap-4 sm:gap-6"
                 style={{ border: "1px solid rgba(17,17,17,0.07)", boxShadow: "0 2px 20px rgba(17,17,17,0.04)" }}
               >
-                <p
-                  className="text-sm font-semibold"
-                  style={{ color: "#111111", opacity: 0.55 }}
-                >
+                <p className="text-sm font-semibold" style={{ color: "#111111", opacity: 0.55 }}>
                   {s.label}
                 </p>
                 <div style={{ height: "1px", background: "rgba(17,17,17,0.08)" }} />
                 <div className="flex justify-between items-end gap-4">
-                  <span
-                    className="font-black font-headline text-[#111111] tracking-tighter leading-none"
-                    style={{ fontSize: "clamp(3rem, 6vw, 5rem)" }}
-                  >
-                    {s.value}
-                  </span>
-                  <p
-                    className="text-xs text-right leading-[1.6] max-w-[120px] font-medium"
-                    style={{ color: "#111111", opacity: 0.5 }}
-                  >
+                  <CountUp target={s.target} suffix={s.suffix} started={statsStarted} />
+                  <p className="text-xs text-right leading-[1.6] max-w-[120px] font-medium" style={{ color: "#111111", opacity: 0.5 }}>
                     {s.sub}
                   </p>
                 </div>
@@ -365,7 +490,7 @@ export default function Home() {
             {/* Copy */}
             <div className="space-y-6 sm:space-y-7">
               <h2
-                className="font-headline text-white leading-[1.15] tracking-tighter"
+                className="font-headline text-white leading-[1.3] tracking-tight"
                 style={{ fontSize: "clamp(2.25rem, 5.5vw, 4.5rem)", fontWeight: 800 }}
               >
                 Built on<br />integrity<br />and expertise
@@ -427,7 +552,7 @@ export default function Home() {
           <div className="text-center mb-10 sm:mb-16 space-y-3 sm:space-y-4">
             <p className="text-white/50 text-xs font-bold tracking-widest uppercase">WHAT WE DO</p>
             <h2
-              className="font-headline text-white leading-[1.15] tracking-tighter"
+              className="font-headline text-white leading-[1.3] tracking-tight"
               style={{ fontSize: "clamp(2.5rem, 6vw, 5rem)", fontWeight: 800 }}
             >
               Complete digital<br />growth solutions
@@ -450,9 +575,9 @@ export default function Home() {
             />
             <div className="absolute inset-0 bg-gradient-to-r from-black/85 via-black/55 to-transparent" />
             <div className="absolute inset-0 p-6 sm:p-8 md:p-10 flex flex-col justify-between">
-              <p className="text-white/65 text-xs font-bold tracking-widest uppercase">SERVICE</p>
+              <p className="text-white text-xs font-bold tracking-widest uppercase" style={{ textShadow: "0 1px 6px rgba(0,0,0,0.8)" }}>SERVICE</p>
               <div className="space-y-3 sm:space-y-4 max-w-lg">
-                <h3 className="text-2xl sm:text-3xl md:text-4xl font-black font-headline text-white leading-tight">
+                <h3 className="text-2xl sm:text-3xl md:text-4xl font-black font-headline text-white leading-tight" style={{ letterSpacing: "0.02em", wordSpacing: "-0.12em" }}>
                   {services[0].title}
                 </h3>
                 <p className="text-white/80 text-xs sm:text-sm leading-relaxed">{services[0].subtitle}</p>
@@ -465,7 +590,7 @@ export default function Home() {
                   ))}
                 </ul>
                 <div className="flex flex-wrap gap-3 pt-1 sm:pt-2">
-                  <a href="#contact" className="btn-white text-xs px-5 py-2">Explore</a>
+                  <a href="tel:+916355183655" className="btn-white text-xs px-5 py-2">Call Now</a>
                   <a href="#contact" className="inline-flex items-center gap-1 text-white/45 hover:text-white transition-colors text-xs font-semibold">
                     Get started <span className="material-symbols-outlined text-sm">arrow_forward</span>
                   </a>
@@ -488,15 +613,15 @@ export default function Home() {
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/45 to-black/5" />
                 <div className="absolute inset-0 p-5 sm:p-6 md:p-8 flex flex-col justify-between">
-                  <p className="text-white/65 text-xs font-bold tracking-widest uppercase">{s.label}</p>
+                  <p className="text-white text-xs font-bold tracking-widest uppercase" style={{ textShadow: "0 1px 6px rgba(0,0,0,0.8)" }}>{s.label}</p>
                   <div className="space-y-2 sm:space-y-3">
-                    <h3 className="text-lg sm:text-xl md:text-2xl font-black font-headline text-white leading-tight">
+                    <h3 className="text-lg sm:text-xl md:text-2xl font-black font-headline text-white leading-tight" style={{ letterSpacing: "0.02em", wordSpacing: "-0.12em" }}>
                       {s.title}
                     </h3>
                     <p className="text-white/80 text-xs leading-relaxed">{s.subtitle}</p>
                     <div className="flex flex-wrap gap-3">
-                      <a href="#contact" className="inline-flex items-center gap-1 px-4 py-1.5 bg-white/10 border border-white/15 text-white font-semibold rounded-full text-xs hover:bg-white/20 transition-all">
-                        Explore
+                      <a href="tel:+916355183655" className="inline-flex items-center gap-1 px-4 py-1.5 bg-white/10 border border-white/15 text-white font-semibold rounded-full text-xs hover:bg-white/20 transition-all">
+                        Call Now
                       </a>
                       <a href="#contact" className="w-7 h-7 rounded-full border border-white/20 flex items-center justify-center text-white/60 hover:text-white hover:border-white/50 transition-all">
                         <span className="material-symbols-outlined" style={{ fontSize: "13px" }}>arrow_forward</span>
@@ -516,7 +641,7 @@ export default function Home() {
           <div className="text-center mb-10 sm:mb-16 space-y-3 sm:space-y-4">
             <p className="text-white/50 text-xs font-bold tracking-widest uppercase">ADVANTAGES</p>
             <h2
-              className="font-headline text-white leading-[1.15] tracking-tighter"
+              className="font-headline text-white leading-[1.3] tracking-tight"
               style={{ fontSize: "clamp(2.5rem, 5.5vw, 4.5rem)", fontWeight: 800 }}
             >
               Why choose<br />Veyber Services?
@@ -541,7 +666,7 @@ export default function Home() {
                 <div className="absolute inset-0 p-5 sm:p-7 flex flex-col justify-between">
                   <p className="text-white text-[10px] font-bold tracking-widest uppercase" style={{ textShadow: "0 1px 8px rgba(0,0,0,0.6)" }}>{card.label}</p>
                   <div className="space-y-2">
-                    <h3 className="text-lg sm:text-xl font-black font-headline text-white leading-tight">{card.title}</h3>
+                    <h3 className="text-lg sm:text-xl font-black font-headline text-white leading-tight" style={{ letterSpacing: "0.02em", wordSpacing: "-0.12em" }}>{card.title}</h3>
                     <p className="text-white/80 text-xs leading-relaxed">{card.desc}</p>
                     <a href="#contact" className="inline-flex items-center gap-1 text-white/40 hover:text-white transition-colors text-xs font-semibold pt-1">
                       Explore <span className="material-symbols-outlined text-sm">arrow_forward</span>
@@ -556,12 +681,12 @@ export default function Home() {
 
       {/* ════════════════════════ PROCESS — deepest dark ════════════════════════ */}
       <section className="bg-[#0a0a0a] py-16 sm:py-20 md:py-24">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6">
           {/* Header */}
           <div className="text-center mb-12 sm:mb-20 space-y-4 sm:space-y-5">
             <p className="text-white/50 text-xs font-bold tracking-widest uppercase">OUR PROCESS</p>
             <h2
-              className="font-headline text-white leading-[1.15] tracking-tighter"
+              className="font-headline text-white leading-[1.3] tracking-tight"
               style={{ fontSize: "clamp(2.5rem, 6vw, 5rem)", fontWeight: 800 }}
             >
               From enquiry<br />to growth
@@ -570,38 +695,47 @@ export default function Home() {
             <a href="#contact" className="inline-flex btn-outline mt-2">Learn more</a>
           </div>
 
-          {/* Staggered steps */}
-          <div className="relative max-w-4xl mx-auto">
-            {/* Center timeline line */}
+          {/* Staggered zigzag steps */}
+          <div className="relative">
+            {/* Centre vertical line (desktop) */}
             <div
-              className="absolute top-0 bottom-0 hidden lg:block"
-              style={{ left: "50%", transform: "translateX(-50%)", width: "1px", background: "rgba(255,255,255,0.08)" }}
+              className="absolute inset-y-0 left-1/2 hidden lg:block"
+              style={{ width: "1px", transform: "translateX(-50%)", background: "rgba(255,255,255,0.2)" }}
             />
 
-            <div className="space-y-4 sm:space-y-6">
-              {processSteps.map((s) => {
-                const isRight = s.side === "right";
+            <div className="space-y-6 sm:space-y-8">
+              {processSteps.map((s, i) => {
+                const isLeft = s.side === "left";
                 return (
-                  <div key={s.step} className={`flex ${isRight ? "lg:justify-start" : "lg:justify-end"} relative`}>
-                    {/* Timeline dot */}
+                  <div key={s.step} className="relative flex items-center">
+                    {/* Desktop: dot on centre line */}
                     <div
-                      className="absolute top-1/2 hidden lg:block"
+                      className="absolute left-1/2 hidden lg:block z-10"
                       style={{
-                        left: "50%",
-                        transform: "translate(-50%, -50%)",
+                        transform: "translate(-50%, 0)",
                         width: "12px",
                         height: "12px",
                         borderRadius: "50%",
-                        background: "rgba(255,255,255,0.25)",
+                        background: "#ffffff",
+                        opacity: 0.45,
+                        top: "50%",
+                        marginTop: "-6px",
                       }}
                     />
+
+                    {/* Left spacer on desktop when card is on right */}
+                    {!isLeft && <div className="hidden lg:block lg:w-1/2 lg:pr-10" />}
+
                     {/* Card */}
                     <div
-                      className={`w-full lg:w-[47%] bg-[#1a1a1a] rounded-xl sm:rounded-2xl p-6 sm:p-8 border border-white/5 space-y-3 sm:space-y-4
-                        ${isRight ? "lg:mr-[3%]" : "lg:ml-[3%]"}`}
+                      className={`w-full lg:w-1/2 bg-[#1a1a1a] rounded-xl sm:rounded-2xl p-6 sm:p-8 border border-white/5 space-y-3 sm:space-y-4
+                        ${isLeft ? "lg:pr-10" : "lg:pl-10"}`}
+                      style={{
+                        marginTop: i > 0 ? undefined : undefined,
+                      }}
                     >
                       <p className="text-white/55 text-sm font-bold">{s.step}</p>
-                      <h3 className="text-2xl sm:text-3xl md:text-4xl font-black font-headline text-white leading-tight whitespace-pre-line">
+                      <h3 className="text-2xl sm:text-3xl md:text-4xl font-black font-headline text-white leading-tight whitespace-pre-line" style={{ letterSpacing: "0.02em", wordSpacing: "-0.12em" }}>
                         {s.title}
                       </h3>
                       <p className="text-white/70 text-sm leading-relaxed">{s.desc}</p>
@@ -614,6 +748,9 @@ export default function Home() {
                         </a>
                       </div>
                     </div>
+
+                    {/* Right spacer on desktop when card is on left */}
+                    {isLeft && <div className="hidden lg:block lg:w-1/2 lg:pl-10" />}
                   </div>
                 );
               })}
@@ -638,10 +775,10 @@ export default function Home() {
           <p className="text-white/55 text-xs font-bold tracking-widest uppercase">START NOW</p>
 
           <h2
-            className="font-headline text-white leading-[1.15] tracking-tighter"
-            style={{ fontSize: "clamp(2.5rem, 6vw, 5rem)", fontWeight: 800 }}
+            className="font-headline text-white leading-[1.3] tracking-tight"
+            style={{ fontSize: "clamp(2rem, 6vw, 5rem)", fontWeight: 800, letterSpacing: "0.02em", wordSpacing: "-0.12em" }}
           >
-            Ready to grow your<br />business?
+            Ready to grow<br />your business?
           </h2>
 
           <p className="text-white/70 text-base sm:text-lg md:text-xl max-w-lg mx-auto leading-relaxed">
@@ -688,8 +825,8 @@ export default function Home() {
               <div className="space-y-3 sm:space-y-4">
                 <p className="text-[#111]/55 text-xs font-bold tracking-widest uppercase">GET IN TOUCH</p>
                 <h2
-                  className="font-headline text-[#111] leading-[1.15] tracking-tighter"
-                  style={{ fontSize: "clamp(2.25rem, 5.5vw, 4.5rem)", fontWeight: 800 }}
+                  className="font-headline text-[#111] leading-[1.3] tracking-tight"
+                  style={{ fontSize: "clamp(2rem, 5.5vw, 4.5rem)", fontWeight: 800 }}
                 >
                   Let&apos;s grow your<br />business together
                 </h2>
@@ -712,7 +849,13 @@ export default function Home() {
                     </div>
                     <div>
                       <p className="text-[#111]/55 text-[10px] font-bold uppercase tracking-widest" style={{ lineHeight: 1, marginBottom: 4 }}>{d.label}</p>
-                      <p className="text-[#111] font-semibold text-sm" style={{ lineHeight: 1 }}>{d.value}</p>
+                      {d.href ? (
+                        <a href={d.href} className="text-[#111] font-semibold text-sm hover:opacity-70 transition-opacity" style={{ lineHeight: 1 }}>
+                          {d.value}
+                        </a>
+                      ) : (
+                        <p className="text-[#111] font-semibold text-sm" style={{ lineHeight: 1 }}>{d.value}</p>
+                      )}
                     </div>
                   </div>
                 ))}
@@ -720,7 +863,7 @@ export default function Home() {
 
               <div className="flex flex-wrap gap-3">
                 <a href="tel:+916355183655" className="btn-dark">Talk to Expert</a>
-                <a href="mailto:info@veyber.co.in" className="inline-flex items-center gap-1 text-[#111]/65 hover:text-[#111] transition-colors text-sm font-semibold">
+                <a href="mailto:admin@veyber.co.in" className="inline-flex items-center gap-1 text-[#111]/65 hover:text-[#111] transition-colors text-sm font-semibold">
                   Send Email <span className="material-symbols-outlined text-base">arrow_forward</span>
                 </a>
               </div>
@@ -733,61 +876,83 @@ export default function Home() {
               </h3>
               <p className="text-[#111]/60 text-sm mb-6 sm:mb-8">Our team will respond within 24 hours.</p>
 
-              <form className="space-y-4 sm:space-y-5">
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              {formState === "success" ? (
+                <div className="flex flex-col items-center justify-center py-12 gap-4 text-center">
+                  <span className="material-symbols-outlined text-green-600" style={{ fontSize: "48px" }}>check_circle</span>
+                  <h4 className="text-[#111] font-black text-xl">Message Sent!</h4>
+                  <p className="text-[#111]/60 text-sm">Thank you! Our team will contact you within 24 hours.</p>
+                  <button
+                    onClick={() => setFormState("idle")}
+                    className="mt-2 px-6 py-2.5 bg-[#111] text-white font-bold rounded-full text-sm hover:bg-[#333] transition-all cursor-pointer"
+                  >
+                    Send Another
+                  </button>
+                </div>
+              ) : (
+                <form className="space-y-4 sm:space-y-5" onSubmit={handleSubmit} method="post" action="#">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                      <label className="text-[10px] font-bold uppercase tracking-widest text-[#111]/60 block mb-2">Name</label>
+                      <input
+                        type="text"
+                        name="name"
+                        placeholder="Your Name"
+                        required
+                        className="w-full bg-[#dde2f2] rounded-xl px-4 py-3 text-[#111] placeholder:text-[#111]/40 outline-none focus:ring-2 focus:ring-[#111]/25 text-sm border-0"
+                      />
+                    </div>
+                    <div>
+                      <label className="text-[10px] font-bold uppercase tracking-widest text-[#111]/60 block mb-2">Email</label>
+                      <input
+                        type="email"
+                        name="email"
+                        placeholder="you@example.com"
+                        required
+                        className="w-full bg-[#dde2f2] rounded-xl px-4 py-3 text-[#111] placeholder:text-[#111]/40 outline-none focus:ring-2 focus:ring-[#111]/25 text-sm border-0"
+                      />
+                    </div>
+                  </div>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                      <label className="text-[10px] font-bold uppercase tracking-widest text-[#111]/60 block mb-2">Phone</label>
+                      <input
+                        type="tel"
+                        name="phone"
+                        placeholder="+91 00000 00000"
+                        className="w-full bg-[#dde2f2] rounded-xl px-4 py-3 text-[#111] placeholder:text-[#111]/40 outline-none focus:ring-2 focus:ring-[#111]/25 text-sm border-0"
+                      />
+                    </div>
+                    <div>
+                      <label className="text-[10px] font-bold uppercase tracking-widest text-[#111]/60 block mb-2">Service Interested</label>
+                      <select name="service" className="w-full bg-[#dde2f2] rounded-xl px-4 py-3 text-[#111] outline-none focus:ring-2 focus:ring-[#111]/15 text-sm border-0 appearance-none">
+                        <option value="">Select a Service</option>
+                        <option>E-commerce Development</option>
+                        <option>E-commerce Account Management</option>
+                        <option>Social Media Handling</option>
+                        <option>Digital Marketing Services</option>
+                        <option>Business Consultancy</option>
+                      </select>
+                    </div>
+                  </div>
                   <div>
-                    <label className="text-[10px] font-bold uppercase tracking-widest text-[#111]/60 block mb-2">Name</label>
-                    <input
-                      type="text"
-                      placeholder="Your Name"
-                      className="w-full bg-[#dde2f2] rounded-xl px-4 py-3 text-[#111] placeholder:text-[#111]/40 outline-none focus:ring-2 focus:ring-[#111]/25 text-sm border-0"
+                    <label className="text-[10px] font-bold uppercase tracking-widest text-[#111]/60 block mb-2">Message</label>
+                    <textarea
+                      rows={4}
+                      name="message"
+                      placeholder="Tell us about your project goals..."
+                      className="w-full bg-[#dde2f2] rounded-xl px-4 py-3 text-[#111] placeholder:text-[#111]/40 outline-none focus:ring-2 focus:ring-[#111]/25 resize-none text-sm border-0"
                     />
                   </div>
-                  <div>
-                    <label className="text-[10px] font-bold uppercase tracking-widest text-[#111]/60 block mb-2">Email</label>
-                    <input
-                      type="email"
-                      placeholder="you@example.com"
-                      className="w-full bg-[#dde2f2] rounded-xl px-4 py-3 text-[#111] placeholder:text-[#111]/40 outline-none focus:ring-2 focus:ring-[#111]/25 text-sm border-0"
-                    />
-                  </div>
-                </div>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <div>
-                    <label className="text-[10px] font-bold uppercase tracking-widest text-[#111]/60 block mb-2">Phone</label>
-                    <input
-                      type="tel"
-                      placeholder="+91 00000 00000"
-                      className="w-full bg-[#dde2f2] rounded-xl px-4 py-3 text-[#111] placeholder:text-[#111]/40 outline-none focus:ring-2 focus:ring-[#111]/25 text-sm border-0"
-                    />
-                  </div>
-                  <div>
-                    <label className="text-[10px] font-bold uppercase tracking-widest text-[#111]/60 block mb-2">Service Interested</label>
-                    <select className="w-full bg-[#dde2f2] rounded-xl px-4 py-3 text-[#111] outline-none focus:ring-2 focus:ring-[#111]/15 text-sm border-0 appearance-none">
-                      <option value="">Select a Service</option>
-                      <option>E-commerce Development</option>
-                      <option>E-commerce Account Management</option>
-                      <option>Social Media Handling</option>
-                      <option>Digital Marketing Services</option>
-                      <option>Business Consultancy</option>
-                    </select>
-                  </div>
-                </div>
-                <div>
-                  <label className="text-[10px] font-bold uppercase tracking-widest text-[#111]/60 block mb-2">Message</label>
-                  <textarea
-                    rows={4}
-                    placeholder="Tell us about your project goals..."
-                    className="w-full bg-[#dde2f2] rounded-xl px-4 py-3 text-[#111] placeholder:text-[#111]/40 outline-none focus:ring-2 focus:ring-[#111]/25 resize-none text-sm border-0"
-                  />
-                </div>
-                <button
-                  type="submit"
-                  className="w-full py-3.5 sm:py-4 bg-[#111] text-white font-black rounded-xl hover:bg-[#2a2a2a] transition-all text-sm uppercase tracking-widest"
-                >
-                  Get Free Consultation →
-                </button>
-              </form>
+
+
+                  <button
+                    type="submit"
+                    className="w-full py-3.5 sm:py-4 bg-[#111] text-white font-black rounded-xl hover:bg-[#2a2a2a] transition-all text-sm uppercase tracking-widest cursor-pointer"
+                  >
+                    Get Free Consultation →
+                  </button>
+                </form>
+              )}
             </div>
           </div>
         </div>
@@ -800,9 +965,9 @@ export default function Home() {
           <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 gap-8 sm:gap-12 pb-10 sm:pb-14 border-b border-white/8">
             {/* Brand */}
             <div className="col-span-2 sm:col-span-2 md:col-span-1 space-y-4">
-              <div>
-                <img src="/logo.png" alt="Veyber" className="h-7 sm:h-8" />
-              </div>
+              <a href="#" className="inline-block cursor-pointer">
+                <img src="/logo.png" alt="Veyber" className="h-7 sm:h-8" style={{ filter: "brightness(0) invert(1)" }} />
+              </a>
               <p className="text-white/60 text-sm leading-relaxed max-w-xs">
                 Expert digital solutions for businesses across Gujarat. Grow faster, smarter, more profitably.
               </p>
@@ -846,9 +1011,13 @@ export default function Home() {
               <h4 className="text-white font-bold text-[10px] uppercase tracking-widest mb-4 sm:mb-5">Contact Us</h4>
               <ul className="space-y-2.5 sm:space-y-3">
                 {contactDetails.map((d) => (
-                  <li key={d.label} className="flex items-center gap-2 sm:gap-2.5 text-white/60 text-xs sm:text-sm">
-                    <span className="material-symbols-outlined text-white/45 flex-shrink-0" style={{ fontSize: "14px", lineHeight: 1 }}>{d.icon}</span>
-                    {d.value}
+                  <li key={d.label} className="flex items-start gap-2 sm:gap-2.5 text-white/60 text-xs sm:text-sm">
+                    <span className="material-symbols-outlined text-white/45 flex-shrink-0 mt-0.5" style={{ fontSize: "14px", lineHeight: 1 }}>{d.icon}</span>
+                    {d.href ? (
+                      <a href={d.href} className="hover:text-white transition-colors">{d.value}</a>
+                    ) : (
+                      <span>{d.value}</span>
+                    )}
                   </li>
                 ))}
               </ul>
@@ -877,7 +1046,7 @@ export default function Home() {
 
           {/* Bottom bar */}
           <div className="pt-6 sm:pt-8 flex flex-col md:flex-row justify-between items-center gap-3 sm:gap-4 text-white/22 text-[10px] sm:text-xs">
-            <p>© 2025 Veyber · Crafted with passion in Gujarat, India</p>
+            <p>Developed by: Veyber Services Pvt. Ltd.</p>
             <p className="text-center">Digital Marketing · eCommerce Development · Business Consultancy · Gujarat</p>
           </div>
         </div>
