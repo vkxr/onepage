@@ -591,7 +591,7 @@ export default function Home() {
                 </ul>
                 <div className="flex flex-wrap gap-3 pt-1 sm:pt-2">
                   <a href="tel:+916355183655" className="btn-white text-xs px-5 py-2">Call Now</a>
-                  <a href="#contact" className="inline-flex items-center gap-1 text-white/45 hover:text-white transition-colors text-xs font-semibold">
+                  <a href="tel:+916355183655" className="inline-flex items-center gap-1 text-white/45 hover:text-white transition-colors text-xs font-semibold">
                     Get started <span className="material-symbols-outlined text-sm">arrow_forward</span>
                   </a>
                 </div>
@@ -623,7 +623,7 @@ export default function Home() {
                       <a href="tel:+916355183655" className="inline-flex items-center gap-1 px-4 py-1.5 bg-white/10 border border-white/15 text-white font-semibold rounded-full text-xs hover:bg-white/20 transition-all">
                         Call Now
                       </a>
-                      <a href="#contact" className="w-7 h-7 rounded-full border border-white/20 flex items-center justify-center text-white/60 hover:text-white hover:border-white/50 transition-all">
+                      <a href="tel:+916355183655" className="w-7 h-7 rounded-full border border-white/20 flex items-center justify-center text-white/60 hover:text-white hover:border-white/50 transition-all">
                         <span className="material-symbols-outlined" style={{ fontSize: "13px" }}>arrow_forward</span>
                       </a>
                     </div>
